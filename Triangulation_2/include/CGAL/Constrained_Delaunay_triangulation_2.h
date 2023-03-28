@@ -978,9 +978,9 @@ remove_2D(Vertex_handle v)
 {
  if (test_dim_down(v)) {  this->_tds.remove_dim_down(v);  }
   else {
-     std::list<Edge> hole;
+    std::deque<Edge> hole;
     make_hole(v, hole);
-    std::list<Edge> shell=hole; //because hole will be emptied by fill_hole
+    std::deque<Edge> shell=hole; //because hole will be emptied by fill_hole
     fill_hole_delaunay(hole);
     update_constraints(shell);
     delete_vertex(v);
