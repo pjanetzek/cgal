@@ -486,6 +486,7 @@ protected:
   void clear_constraints_incident(Vertex_handle va);
   void update_constraints_opposite(Vertex_handle va);
   void update_constraints(const List_edges &hole);
+  void update_constraints(const std::deque<Edge> &hole);
 
   void mark_constraint(Face_handle fr, int i);
 
@@ -1380,6 +1381,23 @@ Constrained_triangulation_2<Gt,Tds,Itag>::
 update_constraints( const List_edges &hole)
 {
   typename List_edges::const_iterator it = hole.begin();
+  Face_handle f;
+  int i;
+  for ( ; it != hole.end(); it ++) {
+    f =(*it).first;
+    i = (*it).second;
+    if ( f->is_constrained(i) )
+      (f->neighbor(i))->set_constraint(mirror_index(f,i),true);
+    else (f->neighbor(i))->set_constraint(mirror_index(f,i),false);
+  }
+}
+
+template < class Gt, class Tds, class Itag >
+void
+Constrained_triangulation_2<Gt,Tds,Itag>::
+update_constraints( const std::deque<Edge> &hole)
+{
+  auto it = hole.begin();
   Face_handle f;
   int i;
   for ( ; it != hole.end(); it ++) {
